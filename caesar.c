@@ -8,10 +8,10 @@
 #include<stdlib.h>
 #include<ctype.h>
 #define MAX_LENGTH 50
-
+char input[MAX_LENGTH];
 
 // Helper functions
-char* get_string(const char call_for_var[MAX_LENGTH]);
+void get_string(const char call_for_var[MAX_LENGTH]);
 char* cypher_string(char* plain_text, int key);
 void print_string(char* cypher_text);
 int get_key(char key[MAX_LENGTH]);
@@ -26,10 +26,10 @@ int main(int argc, char *argv[])
 
     int key_int = get_key(argv[1]);
     
-    char* plain_text = get_string("Plain text:");
+    get_string("Plain text:");
     // int key_int = get_int("Key: ");
 
-    char* cypher_text = cypher_string(plain_text,key_int);
+    char* cypher_text = cypher_string(input,key_int);
     print_string(cypher_text);   
 	
 }
@@ -44,7 +44,7 @@ int get_key(char *key)
     else{
         printf("Key: ");
         scanf("%s ", key);
-        return get_string(key);
+        return get_key(key);
     }
 }
 
@@ -77,13 +77,13 @@ int is_valid(char key[MAX_LENGTH])
 }
 
 // String input
-char* get_string(const char call_for_var[MAX_LENGTH])
+void get_string(const char call_for_var[MAX_LENGTH])
 {
     
-    char* input;
     printf("%s\n", call_for_var);
-    scanf("%s", input);
-    return input;
+    fgets(input, MAX_LENGTH, stdin);
+    input[strlen(input)-1]='\0';
+    return;
 }
 
 

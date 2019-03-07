@@ -71,7 +71,7 @@ void get_string(const char call_for_var[MAX_LENGTH])
     fgets(input, MAX_LENGTH, stdin);
     input[strlen(input)-1]='\0';
 
-    return input;
+    return;
 }
 
 char* cypher_string(char plain_text[MAX_LENGTH], char* key)
