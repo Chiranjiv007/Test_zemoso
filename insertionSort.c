@@ -4,10 +4,11 @@
 // Date: 29/01/2019
 
 #include<stdio.h>
-#include<cs50.h>
+#include <stdlib.h>
+#define MAX_LENGTH 50
 
-// helper functions
-int get_int(char* call_for_var);
+// helper function
+int get_int(char call_for_var[MAX_LENGTH]);
 void get_array(int array[], int size);
 void insertion_sort(int array[], int size);
 void print_array(int array[], int size);
@@ -25,7 +26,7 @@ int main()
 	return 0;
 }
 
-int get_int(char* call_for_var)
+int get_int(char call_for_var[MAX_LENGTH])
 {
 	int value;
 	printf("%s\n", call_for_var);
@@ -45,8 +46,8 @@ void get_array(int array[], int size)
 
 void insertion_sort(int array[], int size)
 {
-	for(int i = 0;i < size; i++){
-		for (int j = i+1; j < count; ++j)
+	for(int i = 0;i < size-1; i++){
+		for (int j = i+1; j < size; ++j)
 		{
 			if(array[i]>array[j])
 			{

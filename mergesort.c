@@ -4,13 +4,17 @@
 // Date: 29/01/2019
 
 #include <stdio.h>
-#include <cs50.h>
+#include <stdlib.h>
+#define MAX_LENGTH 50
 
 // helper function
-int get_int(char* call_for_var);
+int get_int(char call_for_var[MAX_LENGTH]);
 void get_array(int array[], int size);
 void print_array(int array[], int size);
 void swap(int integer1, int integer2);
+void Merge_sort(int array[], int size);
+void merge_sort(int array[], int left_limit, int right_limit);
+void merge(int array[], int left_limit, int mid, int right_limit);
 
 int main()
 {
@@ -24,7 +28,7 @@ int main()
 	return 0;
 }
 
-int get_int(char* call_for_var)
+int get_int(char call_for_var[MAX_LENGTH])
 {
 	int value;
 	printf("%s\n", call_for_var);
@@ -44,7 +48,7 @@ void get_array(int array[], int size)
 
 void Merge_sort(int array[], int size)
 {
-	merge_sort(array, 0, size_of_array-1);
+	merge_sort(array, 0, size-1);
 	return;
 }
 
