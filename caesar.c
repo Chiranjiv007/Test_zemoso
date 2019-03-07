@@ -11,7 +11,6 @@
 
 
 // Helper functions
-int get_int(const char call_for_var[MAX_LENGTH]);
 char* get_string(const char call_for_var[MAX_LENGTH]);
 char* cypher_string(char* plain_text, int key);
 void print_string(char* cypher_text);
@@ -19,15 +18,13 @@ int get_key(char key[MAX_LENGTH]);
 int is_valid(char key[MAX_LENGTH]);
 int string_to_int (char key[MAX_LENGTH]);
 
-char key_char[MAX_LENGTH] = {'\0'};
-int main(int argc, char *key_char)
+int main(int argc, char *argv[])
 {
     if(argc!= 2){
         printf("Wrong number of arguments. You need to provide KEY ");
     }
 
-    printf("%s\n",key_char);
-    int key_int = get_key(key_char);
+    int key_int = get_key(argv[1]);
     
     char* plain_text = get_string("Plain text:");
     // int key_int = get_int("Key: ");
@@ -37,21 +34,24 @@ int main(int argc, char *key_char)
 	
 }
 
-int get_key(char key[MAX_LENGTH])
+// Get a valid key
+int get_key(char *key)
 {
-    printf("get_key");
-    do
-    {
-        printf("Key: ");
-        scanf("%s ", key);    
-    }while(!is_valid(key));
     
-    return string_to_int(key)%26;
+    if(is_valid(key)){
+        return string_to_int(key)%26;
+    }
+    else{
+        printf("Key: ");
+        scanf("%s ", key);
+        return get_string(key);
+    }
 }
 
+// Convert string to Integer
 int string_to_int (char key[MAX_LENGTH])
 {
-    printf("string to int");
+    
     int index = 0,key_int = 0;
     while(key[index]!='\0'){
         key_int*=10;
@@ -61,9 +61,11 @@ int string_to_int (char key[MAX_LENGTH])
     return key_int;
 }
 
+
+// Valid Key?
 int is_valid(char key[MAX_LENGTH])
 {
-    printf("is_valid");
+   
     int i=0;
     
     while(key[i]!='\0')
@@ -74,19 +76,21 @@ int is_valid(char key[MAX_LENGTH])
     return 1;
 }
 
-
+// String input
 char* get_string(const char call_for_var[MAX_LENGTH])
 {
-    printf("get_string");
+    
     char* input;
     printf("%s\n", call_for_var);
     scanf("%s", input);
     return input;
 }
 
+
+// Cypher String
 char* cypher_string(char* plain_text, int key)
 {
-    printf("cypher_string");
+    
     int index=0;
     while(plain_text[index]!='\0')
     {
@@ -106,6 +110,7 @@ char* cypher_string(char* plain_text, int key)
     return plain_text;
 }
 
+// Print Answer
 void print_string(char* cypher_text)
 {
     printf("%s\n", cypher_text);
