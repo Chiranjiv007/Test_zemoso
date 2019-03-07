@@ -4,10 +4,11 @@
 // Date: 29/01/2019
 
 #include <stdio.h>
-#include <cs50.h>
+#include <stdlib.h>
+#define MAX_LENGTH 50
 
 // helper functions
-int get_int(char* call_for_var);
+int get_int(char call_for_var[MAX_LENGTH]);
 void get_array(int array[], int size);
 void quick_sort(int array[], int size);
 void Quick_sort(int array[], int left_limit, int right_limit);
@@ -27,7 +28,7 @@ int main()
 	return 0;
 }
 
-int get_int(char* call_for_var)
+int get_int(char call_for_var[MAX_LENGTH])
 {
 	int value;
 	printf("%s\n", call_for_var);
@@ -51,11 +52,11 @@ void quick_sort(int array[], int size_of_array)
 	return;
 }
 
-void Quick_sort(int array[], int left _limit, int right_limit)
+void Quick_sort(int array[], int left_limit, int right_limit)
 {
 	if(left_limit<right_limit)
 	{
-		pivot = partition(array,left_limit,right_limit);
+		int pivot = partition(array,left_limit,right_limit);
 		Quick_sort(array,left_limit,pivot-1);
 		Quick_sort(array,pivot+1,right_limit);
 	}
@@ -71,7 +72,7 @@ int partition(int array[], int left_limit, int right_limit)
 		if(array[i]<=pivot)
 		{
 			final_pivot=final_pivot+1;
-			swap(A[final_pivot],A[i]);
+			swap(array[final_pivot],array[i]);
 		}
 	}
 	swap(array[final_pivot+1],array[right_limit]);
