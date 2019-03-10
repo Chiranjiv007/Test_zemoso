@@ -1,122 +1,168 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_LENGTH_ARRAY 50
 
-// Helper function
-int is_found(int input_short[MAX_LENGTH_ARRAY],int size, int val);
-void get_ans(int input_short[MAX_LENGTH_ARRAY],int input_long[MAX_LENGTH_ARRAY],int size_short,int size_long);
-int get_array(int input[MAX_LENGTH_ARRAY]);
-int until_all_found(int input_short[MAX_LENGTH_ARRAY],int input_long[MAX_LENGTH_ARRAY], int size_short,int size_long,int index);
-int All_positive(int count[100001],int input_short[MAX_LENGTH_ARRAY],int size_short);
+#include <ctype.h>
+#include <stdio.h>
+#include <sys/resource.h>
+#include <sys/time.h>
 
-int main()
+#include "dictionary.h"
+
+// Default dictionary
+#define DICTIONARY "dictionaries/large"
+#define SIZE 40
+
+struct queue {
+    char* items[SIZE];
+    int front;
+    int rear;
+};
+
+struct queue* createQueue();
+void enqueue(struct queue* q, int);
+int dequeue(struct queue* q);
+void display(struct queue* q);
+int isEmpty(struct queue* q);
+void printQueue(struct queue* q);
+
+int main(void)
 {
-    int input_short[MAX_LENGTH_ARRAY],input_long[MAX_LENGTH_ARRAY];
 
-    int size_short = get_array(input_short);
-    int size_long = get_array(input_long);
+	char source[MAX_LENGTH], destination[MAX_LENGTH];
+	bool loaded = load(DICTIONARY);
 
+	get_string("source: ",source);
+	get_string("Destination: ",destination);
 
-    printf("reached Here\n");
-    get_ans(input_short,input_long,size_short,size_long);
+	// Exit if dictionary not loaded
+    if (!loaded)
+    {
+        printf("Could not load %s.\n", DICTIONARY);
+        return 1;
+    }
 
-    return 0;
-}
-
-
-int get_array(int input[MAX_LENGTH_ARRAY])
-{
-	int size;
-	printf("Size( < 50): ");
-	scanf("%d", &size);
+    travel(source,destination);
 
 	
-	for(int index = 0; index < size; index ++)
-	{
-		scanf("%d", &input[index]);
-	}
-
-	return size;
-}
-
-
-int is_found(int input_short[MAX_LENGTH_ARRAY],int size, int val)
-{
-	for(int i=0;i<size;i++)
-	{
-		if(input_short[i]==val)
-		{
-			return 1;
-		}
-	}
-
+	
 	return 0;
 }
 
-
-int All_positive(int count[100001],int input_short[MAX_LENGTH_ARRAY],int size_short)
+void get_string(const char call_for_var[MAX_LENGTH],int &input[MAX_LENGTH])
 {
-	int c = 0;
-	for(int i = 0;i<size_short;i++)
-	{
-		if(count[input_short[i]]>0)
-		{
-			c++;
-		}
-	}
+    
+    printf("%s\n", call_for_var);
+    fgets(input, MAX_LENGTH, stdin);
+    input[strlen(input)-1]='\0';
 
-	if(c == size_short)
-	{
-		return 1;
-	}
-
-	return 0;
+    return;
 }
 
-
-int until_all_found(int input_short[MAX_LENGTH_ARRAY],int input_long[MAX_LENGTH_ARRAY],
-					int size_short,int size_long,int index)
+void travel()
 {
-	int count[100001] = {0};
 
-	while(1)
+
+
+	if(strlen(source) != strlen(destination))
 	{
-		if(is_found(input_short,size_short,input_long[index]))
-		{
-			count[input_long[index]]++;
-		}
-
-		if(All_positive(count,input_short,size_short))
-		{
-			break;
-		}
-
-		index++;
+		printf("Not possible\n");
+		return;
 	}
 
-	return index;
-}
+	struct queue* q =createQueue();
 
-void get_ans(int input_short[MAX_LENGTH_ARRAY],int input_long[MAX_LENGTH_ARRAY],int size_short,int size_long)
-{
+	bfs
 
-	int min_index, min_window_size = MAX_LENGTH_ARRAY+1;
-	for(int i = 0;i<size_long-size_short+1;i++)
+	int checkpoint[strlen(source)] = {-1};
+
+	while(source != destination)
 	{
-		if(is_found(input_short,size_short,input_long[i]))
+		for(int i = 0; i < strlen(source); i++)
 		{
-			int last_index = until_all_found(input_short,input_long,size_short,size_long,i);
-
-			if(last_index-i < min_window_size)
+			for(int j = 0; j < strlen(source); j++)
 			{
-				min_window_size = last_index-i+1;
-				min_index = i;
+				if(j != checkpoint[i])
+				{
+					char *temp;
+					temp = source;
+
+
+					if(source[j] == destination[j])
+					{
+						continue;
+					}
+					source[j] = destination[j];
+					
+
+					if(check(source))
+					{
+						check_point[i] = j;
+						break;
+					}
+					else
+					{
+						source = temp;
+					}
+				}
 			}
 
 		}
 
 	}
+}
 
-	printf("{%d,%d}\n",min_index,min_index+min_window_size-1);
-	return;
+struct queue* createQueue() {
+    struct queue* q = malloc(sizeof(struct queue));
+    q->front = -1;
+    q->rear = -1;
+    return q;
+}
+
+
+int isEmpty(struct queue* q) {
+    if(q->rear == -1) 
+        return 1;
+    else 
+        return 0;
+}
+
+void enqueue(struct queue* q, char* value){
+    if(q->rear == SIZE-1)
+        printf("\nQueue is Full!!");
+    else {
+        if(q->front == -1)
+            q->front = 0;
+        q->rear++;
+        q->items[q->rear] = value;
+    }
+}
+
+char* dequeue(struct queue* q){
+    char* item;
+    if(isEmpty(q)){
+        printf("Queue is empty");
+        item = -1;
+    }
+    else{
+        item = q->items[q->front];
+        q->front++;
+        if(q->front > q->rear){
+            printf("Resetting queue");
+            q->front = q->rear = -1;
+        }
+    }
+    return item;
+}
+
+void printQueue(struct queue *q) {
+    char* i = q->front;
+
+    if(isEmpty(q)) {
+        printf("Queue is empty");
+    } else {
+        printf("\nQueue contains \n");
+        for(i = q->front; i < q->rear + 1; i++) {
+                printf("%s ", q->items[i]);
+        }
+    }    
 }
